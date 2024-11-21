@@ -41,8 +41,8 @@ jobs:
         # Step 5: Build and Push Docker Image
     - name: Build and push Docker image
       env:
-        DOCKER_USERNAME: ${{isuru.munasinghe1998@gmail.com}}
-        DOCKER_PASSWORD: ${{Isuru@1998}}
+        DOCKER_USERNAME: ${{}}
+        DOCKER_PASSWORD: ${{}}
         DOCKER_IMAGE_NAME: ${{doctor-information}}
       run: |
         echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
