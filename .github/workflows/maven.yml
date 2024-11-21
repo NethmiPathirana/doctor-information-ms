@@ -35,31 +35,31 @@ jobs:
       - name: Build with Maven
         run: mvn clean install -DskipTests
 
-      # Step 4: Debug secrets (Optional for troubleshooting)
-      - name: Debug Secrets
-        run: |
-          echo "Docker Username: $DOCKER_USERNAME"
-          echo "Docker Password Length: ${#DOCKER_PASSWORD}"
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-
-      # Step 5: Ensure fresh Docker login
-      - name: Ensure Fresh Docker Login
-        run: docker logout
-
-      # Step 6: Login to Docker Hub
-      - name: Login to Docker Hub
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        run: |
-          echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
-
-      # Step 7: Build and Push Docker Image
-      - name: Build and Push Docker Image
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-        run: |
-          docker build -t $DOCKER_USERNAME/doctor-information-img:latest .
-          docker push $DOCKER_USERNAME/doctor-information-img:latest
+#      # Step 4: Debug secrets (Optional for troubleshooting)
+#      - name: Debug Secrets
+#        run: |
+#          echo "Docker Username: $DOCKER_USERNAME"
+#          echo "Docker Password Length: ${#DOCKER_PASSWORD}"
+#        env:
+#          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+#          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+#
+#      # Step 5: Ensure fresh Docker login
+#      - name: Ensure Fresh Docker Login
+#        run: docker logout
+#
+#      # Step 6: Login to Docker Hub
+#      - name: Login to Docker Hub
+#        env:
+#          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+#          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+#        run: |
+#          echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+#
+#      # Step 7: Build and Push Docker Image
+#      - name: Build and Push Docker Image
+#        env:
+#          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+#        run: |
+#          docker build -t $DOCKER_USERNAME/doctor-information-img:latest .
+#          docker push $DOCKER_USERNAME/doctor-information-img:latest
