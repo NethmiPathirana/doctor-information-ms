@@ -39,8 +39,8 @@ jobs:
 
       - name: Debug Secrets
         run: |
-          echo "Docker Username: $DOCKER_USERNAME"
-          echo "Docker Password Length: ${#DOCKER_PASSWORD}"
+          echo "Docker Username: isuru998"
+          echo "Docker Password Length: dckr_pat_Axj1BKp8m_zdLoMtVVWMLDILAZA"
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
@@ -53,9 +53,9 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
-          docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" https://index.docker.io/v1/
+          docker login -u "isuru998" -p "dckr_pat_Axj1BKp8m_zdLoMtVVWMLDILAZA" https://index.docker.io/v1/
 
       - name: Build and Push Docker Image
         run: |
-          docker build -t $DOCKER_USERNAME/doctor-information-img:latest .
-          docker push $DOCKER_USERNAME/doctor-information-img:latest
+          docker build -t isuru998/doctor-information-img:latest .
+          docker push isuru998/doctor-information-img:latest
