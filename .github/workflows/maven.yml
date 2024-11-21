@@ -39,8 +39,8 @@ jobs:
 
       - name: Debug Secrets
         run: |
-          echo "Docker Username: isuru998"
-          echo "Docker Password Length: dckr_pat_Axj1BKp8m_zdLoMtVVWMLDILAZA"
+          echo "Docker Username: $DOCKER_USERNAME"
+          echo "Docker Password Length: ${#DOCKER_PASSWORD}"
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
