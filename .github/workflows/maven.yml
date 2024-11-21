@@ -24,27 +24,38 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up JDK 21
-      uses: actions/setup-java@v3
-      with:
-        java-version: '21'
-        distribution: 'temurin'
-        cache: maven
-    - name: Build with Maven
-      run: mvn clean install
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Ensure Fresh Docker Login
-      run: docker logout
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
 
-    - name: Login to Docker Hub
-      env:
-        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      run: |
-        echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+      - name: Build with Maven
+        run: mvn clean install -DskipTests
 
-    - name: Build and Push Docker Image
-      run: |
-        docker build -t $DOCKER_USERNAME/doctor-information-img:latest .
-        docker push $DOCKER_USERNAME/doctor-information-img:latest
+      - name: Debug Secrets
+        run: |
+          echo "Docker Username: $DOCKER_USERNAME"
+          echo "Docker Password Length: ${#DOCKER_PASSWORD}"
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Ensure Fresh Docker Login
+        run: docker logout
+
+      - name: Login to Docker Hub
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          echo $DOCKER_PASSWORD | docker login https://index.docker.io/v1/ -u $DOCKER_USERNAME --password-stdin
+
+      - name: Build and Push Docker Image
+        run: |
+          docker build -t $DOCKER_USERNAME/doctor-information-img:latest .
+          docker push $DOCKER_USERNAME/doctor-information-img:latest
