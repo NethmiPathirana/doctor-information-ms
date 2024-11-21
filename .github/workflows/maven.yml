@@ -38,5 +38,5 @@ jobs:
       # Step 5: Build and Push Docker Image
       - name: Build and Push Docker Image
         run: |
-          docker build -t ghcr.io/NethmiPathirana/doctor-information-img:latest .
-          docker push ghcr.io/NethmiPathirana/doctor-information-img:latest
+          docker build -t ghcr.io/nethmipathirana/doctor-information-img:latest .
+          docker push ghcr.io/nethmipathirana/doctor-information-img:latest
