@@ -1,5 +1,8 @@
 # Stage 1: Build the JAR file
-FROM maven:3.9.1-openjdk-21 AS builder
+FROM maven:latest AS builder
+
+# Install OpenJDK 21
+RUN apt-get update && apt-get install -y openjdk-21-jdk
 
 # Set the working directory in the container
 WORKDIR /app
