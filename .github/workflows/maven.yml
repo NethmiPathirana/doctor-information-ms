@@ -33,25 +33,20 @@ jobs:
         run: |
           docker build -t ghcr.io/nethmipathirana/doctor-information-ms:latest .
 
-      # Step 6: Push Docker image to GHCR
-      - name: Push Docker image to GHCR
+      # Step 6: Check if the JAR file exists in the Docker image
+      - name: Check if JAR file exists in Docker image
         run: |
-          docker push ghcr.io/nethmipathirana/doctor-information-ms:latest
-
-      # Step 7: Ensure the image is public (Optional, only if needed)
-      - name: Set image visibility to public
-        run: |
-          VERSION_ID=$(curl -s -H "Authorization: Bearer ${{ secrets.GHCR_TOKEN }}" \
-            "https://api.github.com/orgs/NethmiPathirana/packages/container/doctor-information-ms/versions" \
-            | jq -r '.[0].id')
-
-          # If version exists, delete it
-          if [ "$VERSION_ID" != "null" ]; then
-            curl -X DELETE -H "Authorization: Bearer ${{ secrets.GHCR_TOKEN }}" \
-              "https://api.github.com/orgs/NethmiPathirana/packages/container/doctor-information-ms/versions/$VERSION_ID"
-            echo "Deleted existing image version."
+          # Run the container and check if the JAR file exists in the /app directory
+          docker run --rm ghcr.io/nethmipathirana/doctor-information-ms:latest ls /app
+          if [ "$(docker run --rm ghcr.io/nethmipathirana/doctor-information-ms:latest ls /app | grep app.jar)" == "" ]; then
+            echo "ERROR: app.jar not found in the Docker image."
+            exit 1
+          else
+            echo "app.jar found in the Docker image."
           fi
 
-          # Step 8: Push new image again after deletion or if no image found
+      # Step 7: Push Docker image to GHCR
+      - name: Push Docker image to GHCR
+        run: |
           docker push ghcr.io/nethmipathirana/doctor-information-ms:latest
           echo "Pushed new Docker image."
