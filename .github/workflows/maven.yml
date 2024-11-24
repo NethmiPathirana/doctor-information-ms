@@ -42,20 +42,43 @@ jobs:
           docker build -t ghcr.io/nethmipathirana/doctor-information-ms:latest .
           echo "Docker image built successfully."
 
-      # Step 6: Push Docker Image to GHCR
-      - name: Push Docker Image
+      # Step 6: Check if the image already exists
+      - name: Check if Image Exists
+        id: check_image
         run: |
-          docker push ghcr.io/nethmipathirana/doctor-information-ms:latest
+          IMAGE_EXISTS=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/orgs/NethmiPathirana/packages/container/doctor-information-ms/versions" \
+            | jq '. | length > 0')
+          echo "::set-output name=image_exists::$IMAGE_EXISTS"
+
+      # Step 7: Delete Existing Image (if it exists)
+      - name: Delete Existing Image if Exists
+        if: steps.check_image.outputs.image_exists == 'true'
+        run: |
+          VERSION_ID=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/orgs/NethmiPathirana/packages/container/doctor-information-ms/versions" \
+            | jq -r '.[0].id')
+          curl -X DELETE -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/orgs/NethmiPathirana/packages/container/doctor-information-ms/versions/$VERSION_ID"
+          echo "Deleted existing image version."
+
+      # Step 8: Push the New Docker Image
+      - name: Push New Docker Image
+        run: |
+          docker push ghcr.io/nethmiPathirana/doctor-information-ms:latest
           echo "Docker image pushed to GitHub Packages."
 
-      # Step 7: Set Image Visibility to Public
+      # Step 9: Set Docker Image Visibility to Public
       - name: Set Docker Image Visibility to Public
         run: |
+          VERSION_ID=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/orgs/NethmiPathirana/packages/container/doctor-information-ms/versions" \
+            | jq -r '.[0].id')
           curl -X PATCH -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             -d '{"visibility": "public"}' \
-            "https://api.github.com/repos/${{ github.repository }}/packages/container/doctor-information-ms/versions/latest"
+            "https://api.github.com/orgs/NethmiPathirana/packages/container/doctor-information-ms/versions/$VERSION_ID"
           echo "Visibility of the Docker image set to public."
 
-      # Step 8: Verify Image Content
+      # Step 10: Verify Image Content
       - name: Verify Image Content
-        run: docker run --entrypoint ls ghcr.io/nethmipathirana/doctor-information-ms:latest /app
+        run: docker run --entrypoint ls ghcr.io/nethmiPathirana/doctor-information-ms:latest /app
