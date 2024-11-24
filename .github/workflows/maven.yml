@@ -41,7 +41,9 @@ jobs:
 
       # Step 6: Push Docker Image to GHCR
       - name: Push Docker Image
-        run: docker push ghcr.io/nethmipathirana/doctor-information-ms:latest
+        run: |
+          docker push ghcr.io/nethmipathirana/doctor-information-ms:latest
+          echo "Successfully pushed the updated image!"
 
       # Step 7: Verify Image Content
       - name: Verify Image Content
