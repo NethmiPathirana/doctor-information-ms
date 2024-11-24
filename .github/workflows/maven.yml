@@ -29,14 +29,20 @@ jobs:
 
       # Step 3: Build the project
       - name: Build with Maven
-        run: mvn clean install -DskipTests
+        run: mvn clean package -DskipTests
 
       # Step 4: Authenticate to GHCR with Personal Access Token (PAT)
       - name: Authenticate to GHCR
         run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      # Step 5: Build and Push Docker Image
-      - name: Build and Push Docker Image
-        run: |
-          docker build -t ghcr.io/nethmipathirana/docker-information-img:latest .
-          docker push ghcr.io/nethmipathirana/docker-information-img:latest
+      # Step 5: Build Docker Image
+      - name: Build Docker Image
+        run: docker build -t ghcr.io/nethmipathirana/docker-information-img:latest .
+
+      # Step 6: Push Docker Image to GHCR
+      - name: Push Docker Image
+        run: docker push ghcr.io/nethmipathirana/docker-information-img:latest
+
+      # Step 7: Verify Docker Image (Optional Debugging)
+      - name: Verify Image Content
+        run: docker run ghcr.io/nethmipathirana/docker-information-img:latest ls /app
