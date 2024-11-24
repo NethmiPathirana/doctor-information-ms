@@ -1,0 +1,103 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: doctor-information
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: doctor-information
+  template:
+    metadata:
+      labels:
+        app: doctor-information
+    spec:
+      containers:
+        - name: doctor-information
+          image: ghcr.io/nethmipathirana/doctor-information-ms:latest  # Update with your actual image name
+          ports:
+            - containerPort: 8081
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: doctor-information-service
+spec:
+  selector:
+    app: doctor-information
+  ports:
+    - protocol: TCP
+      port: 8081
+      targetPort: 8081
+  type: NodePort  # Exposing the service as a NodePort for external access
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: patient-records
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: patient-records
+  template:
+    metadata:
+      labels:
+        app: patient-records
+    spec:
+      containers:
+        - name: patient-records
+          image: ghcr.io/nethmipathirana/patient-records-ms:latest  # Update with your actual image name
+          ports:
+            - containerPort: 8082
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: patient-records-service
+spec:
+  selector:
+    app: patient-records
+  ports:
+    - protocol: TCP
+      port: 8082
+      targetPort: 8082
+  type: NodePort  # Exposing the service as a NodePort for external access
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notification-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notification-service
+  template:
+    metadata:
+      labels:
+        app: notification-service
+    spec:
+      containers:
+        - name: notification-service
+          image: ghcr.io/nethmipathirana/notification-service-ms:latest  # Update with your actual image name
+          ports:
+            - containerPort: 8083
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: notification-service-service
+spec:
+  selector:
+    app: notification-service
+  ports:
+    - protocol: TCP
+      port: 8083
+      targetPort: 8083
+  type: NodePort  # Exposing the service as a NodePort for external access

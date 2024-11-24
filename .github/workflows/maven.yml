@@ -50,3 +50,14 @@ jobs:
         run: |
           docker push ghcr.io/nethmipathirana/doctor-information-ms:latest
           echo "Pushed new Docker image."
+
+      # Step 8: Set up Minikube (this is the CD part)
+      - name: Set up Minikube
+        uses: manusa/actions-minikube@v2.1.0
+        with:
+          minikube-version: 'latest'
+
+      # Step 9: Apply Kubernetes Manifests to Minikube (CD deployment)
+      - name: Deploy to Minikube
+        run: |
+          kubectl apply -f k8s/deployments.yml
