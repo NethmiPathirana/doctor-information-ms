@@ -31,12 +31,12 @@ jobs:
       # Step 5: Build the Docker image
       - name: Build Docker image
         run: |
-          docker build -t ghcr.io/NethmiPathirana/doctor-information-ms:latest .
+          docker build -t ghcr.io/nethmipathirana/doctor-information-ms:latest .
 
-      # Step 6: Push Docker image to GitHub Packages (GHCR)
+      # Step 6: Push Docker image to GHCR
       - name: Push Docker image to GHCR
         run: |
-          docker push ghcr.io/NethmiPathirana/doctor-information-ms:latest
+          docker push ghcr.io/nethmipathirana/doctor-information-ms:latest
 
       # Step 7: Ensure the image is public (Optional, only if needed)
       - name: Set image visibility to public
@@ -53,6 +53,5 @@ jobs:
           fi
 
           # Step 8: Push new image again after deletion or if no image found
-          docker push ghcr.io/NethmiPathirana/doctor-information-ms:latest
+          docker push ghcr.io/nethmipathirana/doctor-information-ms:latest
           echo "Pushed new Docker image."
-
