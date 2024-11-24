@@ -43,6 +43,6 @@ jobs:
       - name: Push Docker Image
         run: docker push ghcr.io/nethmipathirana/docker-information-img:latest
 
-      # Step 7: Verify Docker Image (Optional Debugging)
+      # Step 7: Verify Image Content
       - name: Verify Image Content
-        run: docker run ghcr.io/nethmipathirana/docker-information-img:latest ls /app
+        run: docker run --entrypoint ls ghcr.io/nethmipathirana/docker-information-img:latest /app
