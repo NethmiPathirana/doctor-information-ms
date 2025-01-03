@@ -16,4 +16,3 @@ spring:
       ddl-auto: update # update tables
     show-sql: true
     database-platform: org.hibernate.dialect.MySQLDialect
-
